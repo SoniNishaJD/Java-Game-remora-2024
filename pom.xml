@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.jkoolcloud.nisha</groupId>
+    <artifactId>nisha</artifactId>
+    <version>0.2.1-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <name>nisha</name>
+    <url>https://github.com/Nastel/nishaj/</url>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+
+        <skip.assembly.pack>false</skip.assembly.pack>
+
+        <websphere.install.dir>${basedir}</websphere.install.dir>
+
+        <byte.buddy.version>1.12.8</byte.buddy.version>
+        <!--Versions 5.17.17 up to 5.17.43 are not compatible with RemoraJ!!!-->
+        <chronicle.version>5.21.95</chronicle.version>
+        <powermock.version>2.0.9</powermock.version>
+        <tinylog.version>2.4.1</tinylog.version>
+        <skip.javadoc.pack>true</skip.javadoc.pack>
+    </properties>
+
+    <distributionManagement>
+        <repository>
+            <id>bintray-amavashev2-jkoolcloud</id>
+            <name>amavashev2-jkoolcloud</name>
+            <url>https://api.bintray.com/maven/amavashev2/jkoolcloud/nishaj/;publish=1;override=1</url>
+        </repository>
+    </distributionManagement>
+
+    <dependencies>
+        <dependency>
+            <groupId>net.bytebuddy</groupId>
+            <artifactId>byte-buddy</artifactId>
+            <version>${byte.buddy.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.tinylog</groupId>
+            <artifactId>tinylog-api</artifactId>
+            <version>${tinylog.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.tinylog</groupId>
+            <artifactId>tinylog-impl</artifactId>
+            <version>${tinylog.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.13.2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.powermock</groupId>
+            <artifactId>powermock-module-junit4</artifactId>
+            <version>${powermock.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.powermock</groupId>
+            <artifactId>powermock-api-mockito2</artifactId>
+            <version>${powermock.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <defaultGoal>clean package</defaultGoal>
+
+        <pluginManagement>
+            <!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
+            <plugins>
+                <!-- clean lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#clean_Lifecycle -->
+                <plugin>
+                    <artifactId>maven-clean-plugin</artifactId>
+                    <version>3.1.0</version>
+                </plugin>
+                <!-- default lifecycle, jar packaging: see https://maven.apache.org/ref/current/maven-core/default-bindings.html#Plugin_bindings_for_jar_packaging -->
+                <plugin>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <version>3.0.2</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.8.0</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>2.22.1</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <version>3.0.2</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-install-plugin</artifactId>
+                    <version>2.5.2</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-deploy-plugin</artifactId>
+                    <version>2.8.2</version>
+                </plugin>
+                <!-- site lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#site_Lifecycle -->
+                <plugin>
+                    <artifactId>maven-site-plugin</artifactId>
+                    <version>3.7.1</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-source-plugin</artifactId>
+                    <version>3.1.0</version>
+
+                    <executions>
+                        <execution>
+                            <id>attach-sources</id>
+                            <goals>
+                                <goal>jar</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+
+                <plugin>
+                    <artifactId>maven-project-info-reports-plugin</artifactId>
+                    <version>3.0.0</version>
+                </plugin>
+
+            </plugins>
+        </pluginManagement>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.0.1</version>
+                <configuration>
+                    <doctitle>${product.name.hr}</doctitle>
+                    <windowtitle>${product.name.hr}</windowtitle>
+                    <header>Version ${project.version}</header>
+                    <bottom>${product.copyright.html}</bottom>
+                    <show>protected</show>
+                    <use>true</use>
+                    <notree>false</notree>
+                    <nonavbar>false</nonavbar>
+                    <noindex>false</noindex>
+                    <splitindex>true</splitindex>
+                    <author>true</author>
+                    <version>true</version>
+                    <nodeprecatedlist>false</nodeprecatedlist>
+                    <nodeprecated>false</nodeprecated>
+                    <failOnError>false</failOnError>
+                    <doclint>all</doclint>
+                    <skip>${skip.javadoc.pack}</skip>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>build-javadocs-module</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <modules>
+        <module>nisha-core</module>
+        <module>nisha-simple-test</module>
+        <module>nisha-websphere</module>
+        <module>nisha-jms</module>
+        <module>nisha-jboss</module>
+        <module>nisha-jdbc</module>
+        <module>nisha-stream</module>
+        <module>nisha-apacheHttpClient</module>
+        <module>nisha-javaxServlet</module>
+        <module>nisha-httpUrlConnection</module>
+        <module>nisha-weblogic</module>
+        <module>nisha-websocket</module>
+        <module>nisha-kafka</module>
+        <module>nisha-ejb3</module>
+        <module>nisha-spring</module>
+        <module>nisha-control</module>
+        <module>nisha-socket</module>
+        <module>nisha-io</module>
+        <module>nisha-threads</module>
+        <module>nisha-methods</module>
+        <module>nisha--package</module>
+    </modules>
+</project>

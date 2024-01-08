@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~
+  ~ Copyright (c) 2019-2020 NasTel Technologies, Inc. All Rights Reserved.
+  ~
+  ~ This software is the confidential and proprietary information of NasTel
+  ~ Technologies, Inc. ("Confidential Information").  You shall not disclose
+  ~ such Confidential Information and shall use it only in accordance with
+  ~ the terms of the license agreement you entered into with NasTel
+  ~ Technologies.
+  ~
+  ~ NASTEL MAKES NO REPRESENTATIONS OR WARRANTIES ABOUT THE SUITABILITY OF
+  ~ THE SOFTWARE, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO
+  ~ THE IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+  ~ PURPOSE, OR NON-INFRINGEMENT. NASTEL SHALL NOT BE LIABLE FOR ANY DAMAGES
+  ~ SUFFERED BY LICENSEE AS A RESULT OF USING, MODIFYING OR DISTRIBUTING
+  ~ THIS SOFTWARE OR ITS DERIVATIVES.
+  ~
+  ~ CopyrightVersion 1.0
+  -->
+
+<tnt-data-source
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/Nastel/tnt4j-streams/master/config/tnt-data-source.xsd">
+
+    <java-object name="Null" class="com.jkoolcloud.tnt4j.streams.outputs.NullActivityOutput"/>
+
+    <parser name="propertiesParser" class="com.jkoolcloud.tnt4j.streams.parsers.ActivityMapParser">
+        <field name="correlator">
+            <field-locator locator="HEADER_REMORA_CORR" locator-type="Label"/>
+            <field-locator locator="REMORA_CORR" locator-type="Label"/>
+            <field-locator locator="SESSION" locator-type="Label"/>
+
+        </field>
+        <field name="ID" locator="MESSAGE_ID" locator-type="Label">
+            <field-transform lang="groovy"><![CDATA[
+                $fieldValue != null && $fieldValue.startsWith("ID:") ? $fieldValue - "ID:" : null
+            ]]></field-transform>
+        </field>
+        <field name="TIMESTAMP" datatype="Timestamp" units="Milliseconds">
+            <field-locator id="TNum" locator="TIMESTAMP" locator-type="Label" datatype="Number"/>
+        </field>
+        <field name="Message" locator="MSG" locator-type="Label"/>
+
+        <field name="bytesCount" locator="bytesCount" datatype="Number"/>
+        <field name="lastAccessed" locator="lastAccessed" datatype="Timestamp"/>
+        <field name="accessCount" locator="accessCount" datatype="Number"/>
+        <field name="PORT" locator="PORT" datatype="Number"/>
+        <field name="OFFSET" locator="OFFSET" datatype="Number"/>
+        <field name="port" locator="port" datatype="Number"/>
+        <field name="localPort" locator="localPort" datatype="Number"/>
+
+        <field name="all" locator="#"/>
+    </parser>
+
+    <parser name="EntryParser" class="com.jkoolcloud.tnt4j.streams.parsers.ActivityJavaObjectParser">
+
+        <field name="eventName" locator="name" locator-type="Label"/>
+        <field name="guid" locator="id" locator-type="Label">
+            <field-transform name="ETHTokenSymbolTransform" lang="groovy"><![CDATA[
+                $fieldValue.trim()
+            ]]></field-transform>
+        </field>
+        <field name="class" locator="clazz" locator-type="Label"/>
+
+        <field name="StartTime" locator="startTime" locator-type="Label" units="Milliseconds" datatype="Timestamp" timezone="EET"/>
+        <field name="Thread" locator="thread" locator-type="Label"/>
+        <field name="AdviceClass" locator="adviceClass" locator-type="Label"/>
+        <field name="StackTrace" locator="stackTrace" locator-type="Label"/>
+        <field name="vmId" locator="vmId" locator-type="Label"/>
+        <field name="MODE" locator="mode" locator-type="Label"/>
+
+    </parser>
+
+    <parser name="ExitParser" class="com.jkoolcloud.tnt4j.streams.parsers.ActivityJavaObjectParser">
+        <field name="guid" locator="id" locator-type="Label">
+            <field-transform name="ETHTokenSymbolTransform" lang="groovy"><![CDATA[
+                $fieldValue.trim()
+            ]]></field-transform>
+        </field>
+        <field name="severity" locator="exception" locator-type="Label">
+            <field-transform name="SeverityMarkup" lang="groovy"><![CDATA[
+                $fieldValue == null ? "INFO" : "ERROR"
+            ]]></field-transform>
+        </field>
+        <field name="Correlator" locator="correlator" locator-type="Label"/>
+        <field name="eventName" locator="name" locator-type="Label"/>
+        <field name="exception" locator="exceptionTrace" locator-type="Label"/>
+        <field name="ResourceName" locator="resource" locator-type="Label"/>
+        <field name="ApplName" locator="application" locator-type="Label"/>
+        <field name="exceptionMessage" locator="exception" locator-type="Label"/>
+        <field name="ElapsedTime" locator="duration" locator-type="Label" units="Microseconds" datatype="Timestamp"/>
+        <field name="ServerName" locator="server" locator-type="Label"/>
+        <embedded-activity name="properties" locator="properties" locator-type="Label">
+            <parser-ref name="propertiesParser"/>
+        </embedded-activity>
+        <field name="EventType" locator="eventType" locator-type="Label"/>
+        <field name="MODE" locator="mode" locator-type="Label"/>
+        <field name="vmId" locator="vmId" locator-type="Label"/>
+
+        <!-- <field name="MessageAge" datatype="Number" value-type="age.usec"> -->
+        <!-- <field-locator id="TimestampRAW" locator="startTime" locator-type="Label" datatype="AsInput"> -->
+        <!-- <field-transform lang="groovy" phase="raw"><![CDATA[ -->
+        <!-- import java.util.concurrent.TimeUnit -->
+        <!-- $fieldValue != null && ${ElapsedTime} != null ? (TimeUnit.MILLISECONDS.toMicros(new Date().getTime() - $fieldValue - ${ElapsedTime})) : null -->
+        <!-- ]]></field-transform> -->
+        <!-- </field-locator> -->
+        <!-- </field> -->
+    </parser>
+
+    <stream name="ChronicleStreamExit" class="com.jkoolcloud.tnt4j.streams.inputs.ChronicleQueueStream">
+        <property name="BuildSourceFQNFromStreamedData" value="true"/>
+        <property name="SourceFQN" value="#APPL=${ApplName}#SERVER=${ServerName}#PROCESS=${vmId}"/>
+        <property name="HaltIfNoParser" value="false"/>
+        <property name="FileName" value="../../queue"/>
+        <property name="MarshallClass" value="com.jkoolcloud.nisha.core.Exit"/>
+        <property name="MarshallClass" value="com.jkoolcloud.nisha.core.Entry"/>
+        <property name="StartFromLatest" value="true"/>
+
+        <!--<reference name="Null"/>-->
+        <parser-ref name="ExitParser" tags="EXIT"/>
+        <parser-ref name="EntryParser" tags="ENTRY"/>
+    </stream>
+
+</tnt-data-source>

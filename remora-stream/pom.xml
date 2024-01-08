@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~
+  ~ Copyright (c) 2019-2020 NasTel Technologies, Inc. All Rights Reserved.
+  ~
+  ~ This software is the confidential and proprietary information of NasTel
+  ~ Technologies, Inc. ("Confidential Information").  You shall not disclose
+  ~ such Confidential Information and shall use it only in accordance with
+  ~ the terms of the license agreement you entered into with NasTel
+  ~ Technologies.
+  ~
+  ~ NASTEL MAKES NO REPRESENTATIONS OR WARRANTIES ABOUT THE SUITABILITY OF
+  ~ THE SOFTWARE, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO
+  ~ THE IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+  ~ PURPOSE, OR NON-INFRINGEMENT. NASTEL SHALL NOT BE LIABLE FOR ANY DAMAGES
+  ~ SUFFERED BY LICENSEE AS A RESULT OF USING, MODIFYING OR DISTRIBUTING
+  ~ THIS SOFTWARE OR ITS DERIVATIVES.
+  ~
+  ~ CopyrightVersion 1.0
+  -->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <groupId>com.jkoolcloud.nisha</groupId>
+        <artifactId>nisha</artifactId>
+        <version>0.2.1-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>nisha-stream</artifactId>
+
+    <properties>
+        <chronicle.stream.version>1.14.0-SNAPSHOT</chronicle.stream.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.jkoolcloud.nisha</groupId>
+            <artifactId>nisha-core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.jkoolcloud.tnt4j.streams</groupId>
+            <artifactId>tnt4j-streams-chronicle</artifactId>
+            <version>${chronicle.stream.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.jkoolcloud.nisha</groupId>
+            <artifactId>nisha-core</artifactId>
+            <version>${project.version}</version>
+            <type>test-jar</type>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy-dependencies</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/classes/lib</outputDirectory>
+                            <includeScope>runtime</includeScope>
+                            <!--<includeScope>compile</includeScope>-->
+                            <overWriteReleases>false</overWriteReleases>
+                            <overWriteSnapshots>false</overWriteSnapshots>
+                            <overWriteIfNewer>true</overWriteIfNewer>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.2.0</version>
+            </plugin>
+        </plugins>
+
+    </build>
+
+</project>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~
+  ~ Copyright (c) 2019-2020 NasTel Technologies, Inc. All Rights Reserved.
+  ~
+  ~ This software is the confidential and proprietary information of NasTel
+  ~ Technologies, Inc. ("Confidential Information").  You shall not disclose
+  ~ such Confidential Information and shall use it only in accordance with
+  ~ the terms of the license agreement you entered into with NasTel
+  ~ Technologies.
+  ~
+  ~ NASTEL MAKES NO REPRESENTATIONS OR WARRANTIES ABOUT THE SUITABILITY OF
+  ~ THE SOFTWARE, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO
+  ~ THE IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+  ~ PURPOSE, OR NON-INFRINGEMENT. NASTEL SHALL NOT BE LIABLE FOR ANY DAMAGES
+  ~ SUFFERED BY LICENSEE AS A RESULT OF USING, MODIFYING OR DISTRIBUTING
+  ~ THIS SOFTWARE OR ITS DERIVATIVES.
+  ~
+  ~ CopyrightVersion 1.0
+  -->
+
+<archetype-descriptor
+        xsi:schemaLocation="https://maven.apache.org/plugins/maven-archetype-plugin/archetype-descriptor/1.1.0 http://maven.apache.org/xsd/archetype-descriptor-1.1.0.xsd"
+        name="probe"
+        xmlns="https://maven.apache.org/plugins/maven-archetype-plugin/archetype-descriptor/1.1.0"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+    <requiredProperties>
+        <requiredProperty key="adviceClassName">
+            <defaultValue>${artifactId.replaceAll("nisha-", "")}</defaultValue>
+            <validationRegex>^[A-Z][a-zA-Z0-9_-]*</validationRegex>
+        </requiredProperty>
+    </requiredProperties>
+
+    <fileSets>
+        <fileSet filtered="true" packaged="true" encoding="UTF-8">
+            <directory>src/main/java</directory>
+            <includes>
+                <include>**/*.java</include>
+            </includes>
+        </fileSet>
+        <fileSet filtered="true" encoding="UTF-8">
+            <directory>src/main/resources</directory>
+            <includes>
+                <include>**/*</include>
+            </includes>
+        </fileSet>
+
+        <fileSet encoding="UTF-8">
+            <directory>src/main/java</directory>
+            <includes>
+                <include>**/*.MF</include>
+            </includes>
+        </fileSet>
+        <fileSet filtered="true" packaged="true" encoding="UTF-8">
+            <directory>src/test/java</directory>
+            <includes>
+                <include>**/*.java</include>
+            </includes>
+        </fileSet>
+        <fileSet encoding="UTF-8">
+            <directory></directory>
+            <includes>
+                <include>README.md</include>
+            </includes>
+        </fileSet>
+    </fileSets>
+</archetype-descriptor>

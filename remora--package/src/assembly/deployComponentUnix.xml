@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~
+  ~ Copyright (c) 2019-2020 NasTel Technologies, Inc. All Rights Reserved.
+  ~
+  ~ This software is the confidential and proprietary information of NasTel
+  ~ Technologies, Inc. ("Confidential Information").  You shall not disclose
+  ~ such Confidential Information and shall use it only in accordance with
+  ~ the terms of the license agreement you entered into with NasTel
+  ~ Technologies.
+  ~
+  ~ NASTEL MAKES NO REPRESENTATIONS OR WARRANTIES ABOUT THE SUITABILITY OF
+  ~ THE SOFTWARE, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO
+  ~ THE IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+  ~ PURPOSE, OR NON-INFRINGEMENT. NASTEL SHALL NOT BE LIABLE FOR ANY DAMAGES
+  ~ SUFFERED BY LICENSEE AS A RESULT OF USING, MODIFYING OR DISTRIBUTING
+  ~ THIS SOFTWARE OR ITS DERIVATIVES.
+  ~
+  ~ CopyrightVersion 1.0
+  -->
+
+<component xmlns="http://maven.apache.org/ASSEMBLY-COMPONENT/2.0.0"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://maven.apache.org/ASSEMBLY-COMPONENT/2.0.0 http://maven.apache.org/xsd/assembly-component-2.0.0.xsd">
+
+    <moduleSets>
+        <moduleSet>
+            <useAllReactorProjects>true</useAllReactorProjects>
+
+            <sources>
+                <includeModuleDirectory>false</includeModuleDirectory>
+                <fileSets>
+                    <fileSet>
+                        <outputDirectory></outputDirectory>
+                        <directory>${project.build.directory}</directory>
+                        <includes>
+                            <include>nisha.jar</include>
+                        </includes>
+                    </fileSet>
+
+                    <fileSet>
+                        <outputDirectory>modules</outputDirectory>
+                        <directory>${project.build.directory}</directory>
+                        <includes>
+                            <include>*.jar</include>
+                        </includes>
+                        <excludes>
+                            <exclude>nisha.jar</exclude>
+                            <exclude>nisha-core*</exclude>
+                            <exclude>nisha-stream*</exclude>
+                            <exclude>nisha--package*</exclude>
+                            <exclude>original-*</exclude>
+                            <exclude>*-sources.jar</exclude>
+                            <exclude>*-test.jar</exclude>
+                            <exclude>*-shaded.jar</exclude>
+                        </excludes>
+                    </fileSet>
+                </fileSets>
+            </sources>
+
+        </moduleSet>
+    </moduleSets>
+
+    <fileSets>
+        <fileSet>
+            <directory>../config</directory>
+            <includes>
+                <include>**/*.*</include>
+            </includes>
+            <outputDirectory>config</outputDirectory>
+            <lineEnding>unix</lineEnding>
+        </fileSet>
+
+        <fileSet>
+            <directory>../bin</directory>
+            <includes>
+                <include>**/*.sh</include>
+            </includes>
+            <outputDirectory>.</outputDirectory>
+            <fileMode>0777</fileMode>
+            <lineEnding>unix</lineEnding>
+        </fileSet>
+
+        <!-- static content -->
+        <fileSet>
+            <directory>../</directory>
+            <includes>
+                <include>README*</include>
+                <include>LICENSE*</include>
+                <include>NOTICE*</include>
+            </includes>
+            <outputDirectory></outputDirectory>
+            <fileMode>0777</fileMode>
+            <lineEnding>unix</lineEnding>
+        </fileSet>
+        <fileSet>
+            <directory>../nisha-stream/target/classes/lib</directory>
+            <includes>
+                <include>**/*.*</include>
+            </includes>
+            <outputDirectory>tnt4j-streams\lib</outputDirectory>
+        </fileSet>
+        <fileSet>
+            <directory>../nisha-stream/samples</directory>
+            <includes>
+                <include>**/*.*</include>
+            </includes>
+            <excludes>
+                <exclude>**/*.sh</exclude>
+            </excludes>
+            <outputDirectory>tnt4j-streams</outputDirectory>
+            <lineEnding>unix</lineEnding>
+        </fileSet>
+        <fileSet>
+            <directory>../nisha-stream/samples</directory>
+            <includes>
+                <include>**/*.sh</include>
+            </includes>
+            <outputDirectory>tnt4j-streams</outputDirectory>
+            <fileMode>0777</fileMode>
+            <lineEnding>unix</lineEnding>
+        </fileSet>
+        <fileSet>
+            <directory>../nisha-stream/config</directory>
+            <includes>
+                <include>**/*.*</include>
+            </includes>
+            <outputDirectory>tnt4j-streams/config</outputDirectory>
+            <lineEnding>unix</lineEnding>
+        </fileSet>
+    </fileSets>
+    <files>
+        <file>
+            <source>../nisha-control/README.md</source>
+            <outputDirectory>.</outputDirectory>
+            <destName>README-nisha-control.md</destName>
+            <lineEnding>unix</lineEnding>
+        </file>
+
+    </files>
+</component>
